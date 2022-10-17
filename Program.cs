@@ -1,34 +1,17 @@
-﻿using Tables;
-
-namespace Program
+﻿namespace Program
 {
   public class Program
   {
     public static int Main(string[] args)
     {
-      // map the arguments correctl
-      string action = args[0];
-      string tableName = args[1];
-      bool important = false;
-      List<string> filterList = new List<string>();
+      ArgumentHandler.ArgumentHandler argumentHandler = new ArgumentHandler.ArgumentHandler(args);
 
-      foreach (string item in args[2..])
-      {
-        if (item != "--imp")
-        {
-          filterList.Add(item);
-          continue;
-        }
 
-        important = true;
-        break;
-      }
-
-      string text = String.Join(" ", filterList);
-      Tables.Table table = new Tables.Table(tableName);
-
+      string action = argumentHandler.getAction();
       if (action == "get")
       {
+        string tableName = argumentHandler.getTableName();
+        Tables.Table table = new Tables.Table(tableName);
         if (!table.checkExistance())
         {
           Console.WriteLine("Can't fetch tasks from an non existent table");
@@ -36,7 +19,10 @@ namespace Program
         }
 
         table.loadTasks();
-        List<Tables.Task> tasks = table.filter(text, important);
+        List<Tables.Task> tasks = table.filter(
+          argumentHandler.getText(),
+          argumentHandler.getImportant()
+        );
         foreach (Tables.Task task in tasks)
         {
           // set the text color
@@ -48,6 +34,8 @@ namespace Program
       }
       else if (action == "set")
       {
+        string tableName = argumentHandler.getTableName();
+        Tables.Table table = new Tables.Table(tableName);
         if (!table.checkExistance())
         {
           table.createExistance();
@@ -56,23 +44,32 @@ namespace Program
         }
 
         table.addTask(new Tables.Task(
-          text,
-          important
+          argumentHandler.getText(),
+          argumentHandler.getImportant()
         ));
       }
       else if (action == "del")
       {
+
+        string tableName = argumentHandler.getTableName();
+        Tables.Table table = new Tables.Table(tableName);
         table.yeetExistance();
       }
-      else if (action == "help")
-      {
-        // TODO
-      }
       else
-      {
-        Console.WriteLine("Please enter a valid action");
-        return 1;
-      }
+        Console.Write(
+$@"
+Running Version 1.0.0
+
+Usage:
+todo get <tableName> [Text filter] : Show the tasks inside a table
+todo set <tableName> [Task Name]   : Add a new task to a table
+todo del <tableName>               : Delete a table
+
+Options:
+--imp       Important Mode
+
+"
+        );
 
       return 0;
     }

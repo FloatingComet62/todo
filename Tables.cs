@@ -35,7 +35,16 @@ namespace Tables
     // create the table
     public void createExistance()
     {
-      File.Create("tables/" + this.name + ".txt");
+      try
+      {
+        File.Create("tables/" + this.name + ".txt");
+      }
+      catch (DirectoryNotFoundException)
+      {
+        Directory.CreateDirectory("tables");
+        Console.WriteLine("Tables folder was not found, this will happen once you first install this tool. Now it would happen again unless you manually delete the folder");
+        Environment.Exit(1);
+      }
     }
 
     // delete the table
