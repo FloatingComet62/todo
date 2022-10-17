@@ -62,7 +62,7 @@ namespace Program
       }
       else if (action == "del")
       {
-        // TODO
+        table.yeetExistance();
       }
       else if (action == "help")
       {

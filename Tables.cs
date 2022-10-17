@@ -38,6 +38,15 @@ namespace Tables
       File.Create("tables/" + this.name + ".txt");
     }
 
+    // delete the table
+    public void yeetExistance()
+    {
+      if (!this.checkExistance())
+        Console.WriteLine("Can't delete an non existent table");
+
+      File.Delete("tables/" + this.name + ".txt");
+    }
+
     // load the tasks into this.tasks
     public void loadTasks()
     {
