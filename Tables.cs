@@ -32,6 +32,12 @@ namespace Tables
       return File.Exists("tables/" + this.name + ".txt");
     }
 
+    // create the table
+    public void createExistance()
+    {
+      File.Create("tables/" + this.name + ".txt");
+    }
+
     // load the tasks into this.tasks
     public void loadTasks()
     {
@@ -48,6 +54,16 @@ namespace Tables
           important
         ));
       }
+    }
+
+    // add task in the table file
+    public void addTask(Task task)
+    {
+      string rawTask = "";
+      if (task.important) rawTask += "!";
+      rawTask += task.task;
+
+      File.AppendAllText("tables/" + this.name + ".txt", rawTask + Environment.NewLine, Encoding.UTF8);
     }
 
     // filter through the tasks
