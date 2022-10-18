@@ -37,7 +37,12 @@ namespace Tables
     // check if the table actually exists
     public bool checkExistance()
     {
-      return File.Exists("tables/" + this.name + ".txt");
+      return File.Exists(
+          Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+            ".tables/" + this.name + ".txt"
+          )
+      );
     }
 
     // create the table
@@ -45,7 +50,12 @@ namespace Tables
     {
       try
       {
-        File.Create("tables/" + this.name + ".txt");
+        File.Create(
+          Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+            ".tables/" + this.name + ".txt"
+          )
+        );
       }
       catch (DirectoryNotFoundException)
       {
@@ -58,14 +68,22 @@ namespace Tables
     // delete the table
     public void yeetExistance()
     {
-      File.Delete("tables/" + this.name + ".txt");
+      File.Delete(
+        Path.Combine(
+          Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+          ".tables/" + this.name + ".txt"
+        )
+      );
     }
 
     // load the tasks into this.tasks
     public void loadTasks()
     {
       string contents = File.ReadAllText(
-        "tables/" + this.name + ".txt",
+        Path.Combine(
+          Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+          ".tables/" + this.name + ".txt"
+        ),
         Encoding.UTF8
       );
       string[] rawTasks = contents.Split("\n");
@@ -86,7 +104,10 @@ namespace Tables
     public void addTask(Task task)
     {
       File.AppendAllText(
-        "tables/" + this.name + ".txt",
+        Path.Combine(
+          Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+          ".tables/" + this.name + ".txt"
+        ),
         task.raw() + Environment.NewLine,
         Encoding.UTF8
       );
@@ -97,11 +118,17 @@ namespace Tables
     {
 
       List<string> contents = File.ReadAllLines(
-        "tables/" + this.name + ".txt"
+        Path.Combine(
+          Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+          ".tables/" + this.name + ".txt"
+        )
       ).ToList();
       contents.Remove(task.raw());
       File.WriteAllText(
-        "tables/" + this.name + ".txt",
+        Path.Combine(
+          Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+          ".tables/" + this.name + ".txt"
+        ),
         String.Join("\n", contents) + "\n"
       );
     }
