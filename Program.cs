@@ -10,8 +10,7 @@
       string action = argumentHandler.getAction();
       if (action == "get")
       {
-        string tableName = argumentHandler.getTableName();
-        Tables.Table table = new Tables.Table(tableName);
+        Tables.Table table = new Tables.Table(argumentHandler.getTableName());
         if (!table.checkExistance())
         {
           Console.WriteLine("Can't fetch tasks from an non existent table");
@@ -40,7 +39,7 @@
         {
           table.createExistance();
           Console.WriteLine(tableName + " Table is created");
-          return 1;
+          return 1; // to prevent multiple access to the same file at the same time, we just exit the program and ask the user to run the program again
         }
 
         table.addTask(new Tables.Task(
@@ -48,11 +47,53 @@
           argumentHandler.getImportant()
         ));
       }
+      else if (action == "rm")
+      {
+        Tables.Table table = new Tables.Table(argumentHandler.getTableName());
+        if (!table.checkExistance())
+        {
+          Console.WriteLine("Can't remove tasks from an non existent table");
+          return 1;
+        }
+
+        table.loadTasks();
+        Tables.Task task;
+        try
+        {
+          task = table.filter(
+            argumentHandler.getText(),
+            argumentHandler.getImportant()
+          )[0];
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+          Console.WriteLine("Task not found");
+          return 1;
+        }
+
+        Console.ForegroundColor = ConsoleColor.DarkRed;
+        Console.WriteLine(task.task);
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine("Are you sure you want to delete this task");
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.ReadKey();
+
+        table.deleteTask(task);
+      }
       else if (action == "del")
       {
 
-        string tableName = argumentHandler.getTableName();
-        Tables.Table table = new Tables.Table(tableName);
+        Tables.Table table = new Tables.Table(argumentHandler.getTableName());
+        if (!table.checkExistance())
+          Console.WriteLine("Can't delete an non existent table");
+
+        Console.ForegroundColor = ConsoleColor.DarkRed;
+        Console.WriteLine(table.name);
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine("Are you sure you want to delete this table");
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.ReadKey();
+
         table.yeetExistance();
       }
       else
@@ -63,6 +104,7 @@ Running Version 1.0.0
 Usage:
 todo get <tableName> [Text filter] : Show the tasks inside a table
 todo set <tableName> [Task Name]   : Add a new task to a table
+todo rm <tableName> [Task Name]    : Removes a task
 todo del <tableName>               : Delete a table
 
 Options:

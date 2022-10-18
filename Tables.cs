@@ -12,6 +12,14 @@ namespace Tables
       this.task = task;
       this.important = important;
     }
+
+    public string raw()
+    {
+      string rawTask = "";
+      if (this.important) rawTask += "!";
+      rawTask += this.task;
+      return rawTask;
+    }
   }
 
   // A table: collection of tasks
@@ -50,16 +58,16 @@ namespace Tables
     // delete the table
     public void yeetExistance()
     {
-      if (!this.checkExistance())
-        Console.WriteLine("Can't delete an non existent table");
-
       File.Delete("tables/" + this.name + ".txt");
     }
 
     // load the tasks into this.tasks
     public void loadTasks()
     {
-      string contents = File.ReadAllText("tables/" + this.name + ".txt", Encoding.UTF8);
+      string contents = File.ReadAllText(
+        "tables/" + this.name + ".txt",
+        Encoding.UTF8
+      );
       string[] rawTasks = contents.Split("\n");
       foreach (string rawTask in rawTasks)
       {
@@ -77,11 +85,25 @@ namespace Tables
     // add task in the table file
     public void addTask(Task task)
     {
-      string rawTask = "";
-      if (task.important) rawTask += "!";
-      rawTask += task.task;
+      File.AppendAllText(
+        "tables/" + this.name + ".txt",
+        task.raw() + Environment.NewLine,
+        Encoding.UTF8
+      );
+    }
 
-      File.AppendAllText("tables/" + this.name + ".txt", rawTask + Environment.NewLine, Encoding.UTF8);
+    // Delete a task
+    public void deleteTask(Task task)
+    {
+
+      List<string> contents = File.ReadAllLines(
+        "tables/" + this.name + ".txt"
+      ).ToList();
+      contents.Remove(task.raw());
+      File.WriteAllText(
+        "tables/" + this.name + ".txt",
+        String.Join("\n", contents) + "\n"
+      );
     }
 
     // filter through the tasks
