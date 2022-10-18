@@ -22,7 +22,7 @@ namespace ArgumentHandler
       }
       catch (ArgumentOutOfRangeException)
       {
-        Console.WriteLine("Not enough arguments were provided");
+        Console.WriteLine("Not enough arguments were provided\nTry todo help");
         Environment.Exit(1);
       }
 
