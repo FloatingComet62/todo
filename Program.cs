@@ -37,9 +37,8 @@
         Tables.Table table = new Tables.Table(tableName);
         if (!table.checkExistance())
         {
-          table.createExistance();
-          Console.WriteLine(tableName + " Table is created");
-          return 1; // to prevent multiple access to the same file at the same time, we just exit the program and ask the user to run the program again
+          Console.WriteLine(tableName + " table doesn't exist");
+          return 1;
         }
 
         table.addTask(new Tables.Task(
@@ -82,7 +81,6 @@
       }
       else if (action == "del")
       {
-
         Tables.Table table = new Tables.Table(argumentHandler.getTableName());
         if (!table.checkExistance())
           Console.WriteLine("Can't delete an non existent table");
@@ -96,16 +94,30 @@
 
         table.yeetExistance();
       }
+      else if (action == "create")
+      {
+        string tableName = argumentHandler.getTableName();
+        Tables.Table table = new Tables.Table(tableName);
+        if (table.checkExistance())
+        {
+          Console.WriteLine(tableName + " table already exists");
+          return 1;
+        }
+
+        table.createExistance();
+        Console.WriteLine(tableName + " table created");
+      }
       else
         Console.Write(
 $@"
 Running Version 1.0.0
 
 Usage:
+todo create <tableName>            : Create a table
+todo del <tableName>               : Delete a table
 todo get <tableName> [Text filter] : Show the tasks inside a table
 todo set <tableName> [Task Name]   : Add a new task to a table
-todo rm <tableName> [Task Name]    : Removes a task
-todo del <tableName>               : Delete a table
+todo rm <tableName> [Task Name]    : Removes a task inside a table
 
 Options:
 --imp       Important Mode

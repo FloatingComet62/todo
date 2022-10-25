@@ -59,8 +59,13 @@ namespace Tables
       }
       catch (DirectoryNotFoundException)
       {
-        Directory.CreateDirectory("tables");
-        Console.WriteLine("Tables folder was not found, this will happen once you first install this tool. Now it would happen again unless you manually delete the folder");
+        Directory.CreateDirectory(
+          Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+            ".tables"
+          )
+        );
+        Console.WriteLine("~/.tables folder was not found.\nTables folder created\nPlease run the command again");
         Environment.Exit(1);
       }
     }

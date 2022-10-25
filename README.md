@@ -10,10 +10,11 @@ A command line todo app
 
 ## Usage
 
-todo get {tableName} [Text filter]: Show the tasks inside a table<br>
-todo set {tableName} [Task Name]: Add a new task to a table<br>
-todo rm {tableName} [Task Name]: Removes a task<br>
-todo del {tableName}: Delete a table<br>
+todo create {tableName} : Create a table<br>
+todo del {tableName} : Delete a table<br>
+todo get {tableName} [Text filter] : Show the tasks inside a table<br>
+todo set {tableName} [Task Name] : Add a new task to a table<br>
+todo rm {tableName} [Task Name] : Removes a task inside a table<br>
 
 Options:<br>
 --imp Important Mode
